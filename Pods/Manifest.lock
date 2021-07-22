@@ -1,0 +1,24 @@
+PODS:
+  - Alamofire (5.4.1)
+  - MockingbirdFramework (0.16.0)
+  - Starscream (4.0.4)
+
+DEPENDENCIES:
+  - Alamofire (= 5.4.1)
+  - MockingbirdFramework (~> 0.15)
+  - Starscream (~> 4.0.0)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - MockingbirdFramework
+    - Starscream
+
+SPEC CHECKSUMS:
+  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
+  MockingbirdFramework: d1c649854c0a4ae5b115f860d75513b6438489a2
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+
+PODFILE CHECKSUM: 63773f2a167bcc1dee2e7b6d58707bf4dde40eb0
+
+COCOAPODS: 1.10.1

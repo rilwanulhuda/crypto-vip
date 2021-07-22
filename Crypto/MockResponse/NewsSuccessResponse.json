@@ -1,0 +1,69 @@
+{
+    "Promoted": [],
+    "Type": 100,
+    "Message": "News list successfully returned",
+    "RateLimit": {},
+    "HasWarning": false,
+    "Data": [
+        {
+            "id": "26987607",
+            "body": "Today, when technological advancements occur exponentially, the fintech sector has found itself at the vanguard, from online stock trading platforms and mobile banking to unequivocally the most coveted one, cryptocurrency. The popularity of cryptocurrencies such as ethereum Bitcoin has considerably increased in the recent past worldwide and in India. According to several media reports, the [&#8230;]",
+            "categories": "BTC|Business|ETH|Blockchain|Trading",
+            "source_info": {
+                "name": "TimesNext",
+                "lang": "EN",
+                "img": "https://images.cryptocompare.com/news/default/timesnext.png"
+            },
+            "downvotes": "0",
+            "url": "https://timesnext.com/is-there-still-hope-cryptocurrency-in-india/",
+            "tags": "Bitcoin|Bitcoin News|Bitcoin Price|Bitcoin Price in India|Bitcoin to INR|Blockchain|Blockchain News|BTC to INR|Business|Business News|OpEd|Startup|Startup News|Trending|bitcoin india|bitcoin india news|bitcoin news|bitcoin news india|bitcoin to inr|btc inr|btc news|business news|business news in india|business news india|crypto news|crypto regulations|cryptocurrency news|startup news|startup news in india|startup news india",
+            "source": "timesnext",
+            "imageurl": "https://images.cryptocompare.com/news/default/timesnext.png",
+            "published_on": 1622955297,
+            "title": "Is There Still Hope Cryptocurrency in India?",
+            "upvotes": "0",
+            "guid": "https://timesnext.com/?p=16077",
+            "lang": "EN"
+        },
+        {
+            "id": "26987582",
+            "body": "Many investors rely on bullish breakouts from Bitcoin as a sign of the next altcoin season but data suggests this strategy is flawed.",
+            "categories": "Altcoin|Trading|BTC|ETH|Business",
+            "source_info": {
+                "name": "CoinTelegraph",
+                "lang": "EN",
+                "img": "https://images.cryptocompare.com/news/default/cointelegraph.png"
+            },
+            "downvotes": "0",
+            "url": "https://cointelegraph.com/news/why-bitcoin-s-next-breakout-may-not-be-an-altcoin-season-signal",
+            "tags": "Altcoin|Alt Season|Ethereum|Rally|Dogecoin",
+            "source": "cointelegraph",
+            "imageurl": "https://images.cryptocompare.com/news/default/cointelegraph.png",
+            "published_on": 1622934000,
+            "title": "Why Bitcoin's next breakout may not be an altcoin season signal",
+            "upvotes": "0",
+            "guid": "https://cointelegraph.com/news/why-bitcoin-s-next-breakout-may-not-be-an-altcoin-season-signal",
+            "lang": "EN"
+        },
+        {
+            "id": "26987565",
+            "body": "Mid-May&#8217;s crash and the subsequent correction phase that followed changed the global crypto-market&#8217;s dynamics completely. The market cap dropped by more than $177 billion on 19 May alone, after Bitcoin and Ethereum, the two flagship cryptos, recorded their biggest single-day price drops since March last year. Parallelly, Bitcoin&#8217;s market dominance also saw a sharp decline [&#8230;]",
+            "categories": "BTC|Market|ETH|Trading",
+            "source_info": {
+                "name": "AMB Crypto",
+                "lang": "EN",
+                "img": "https://images.cryptocompare.com/news/default/ambcrypto.png"
+            },
+            "downvotes": "0",
+            "url": "https://ambcrypto.com/bitcoin-mispricing-is-it-the-right-opportunity-to-get-in/",
+            "tags": "Bitcoin|BTC Trading View|News|News 1|Social|Trading View",
+            "source": "ambcrypto",
+            "imageurl": "https://images.cryptocompare.com/news/default/ambcrypto.png",
+            "published_on": 1622932214,
+            "title": "‘Bitcoin mispricing:’ Is it the right opportunity to get in?",
+            "upvotes": "0",
+            "guid": "https://ambcrypto.com/?p=161870",
+            "lang": "EN"
+        }
+    ]
+}
