@@ -72,6 +72,7 @@
 		F92DB2AC26A93FFD000F3E49 /* TopListRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AB26A93FFD000F3E49 /* TopListRequestModel.swift */; };
 		F92DB2AE26A94445000F3E49 /* HomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AD26A94445000F3E49 /* HomeTests.swift */; };
 		F92DB2B026A94452000F3E49 /* NewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92DB2AF26A94452000F3E49 /* NewsTests.swift */; };
+		F9DC330F26ABD9B2003ED966 /* WSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DC330E26ABD9B2003ED966 /* WSService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +158,7 @@
 		F92DB2AB26A93FFD000F3E49 /* TopListRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopListRequestModel.swift; sourceTree = "<group>"; };
 		F92DB2AD26A94445000F3E49 /* HomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTests.swift; sourceTree = "<group>"; };
 		F92DB2AF26A94452000F3E49 /* NewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTests.swift; sourceTree = "<group>"; };
+		F9DC330E26ABD9B2003ED966 /* WSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSService.swift; sourceTree = "<group>"; };
 		FE3F2EEB239F3127564E185F /* Pods-Crypto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Crypto.debug.xcconfig"; path = "Target Support Files/Pods-Crypto/Pods-Crypto.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -309,6 +311,7 @@
 			children = (
 				F92DB27A26A93D17000F3E49 /* NetworkService.swift */,
 				F92DB27B26A93D17000F3E49 /* Endpoint.swift */,
+				F9DC330E26ABD9B2003ED966 /* WSService.swift */,
 			);
 			path = NetworkService;
 			sourceTree = "<group>";
@@ -700,6 +703,7 @@
 				F92DB25B26A93A54000F3E49 /* HomeRouter.swift in Sources */,
 				F92DB27C26A93D17000F3E49 /* NetworkService.swift in Sources */,
 				F92DB25F26A93AB9000F3E49 /* CRRoute.swift in Sources */,
+				F9DC330F26ABD9B2003ED966 /* WSService.swift in Sources */,
 				F92DB23F26A9390B000F3E49 /* Ext+Double.swift in Sources */,
 				F92DB28D26A93DAE000F3E49 /* NewsModel.swift in Sources */,
 				F92DB2A426A93E3E000F3E49 /* Toast.swift in Sources */,
