@@ -13,19 +13,19 @@ import XCTest
 class NewsTests: CryptoTests {
     var newsManagerMock: NewsManagerMock!
     var interactor: NewsInteractor!
-    var sut: NewsPresenter!
+    var presenter: NewsPresenter!
     
     override func setUp() {
         super.setUp()
         newsManagerMock = mock(NewsManager.self).initialize(networkService: networkServiceMock)
-        sut = NewsPresenter(view: nil)
-        interactor = NewsInteractor(presenter: sut, manager: newsManagerMock)
+        presenter = NewsPresenter(view: nil)
+        interactor = NewsInteractor(presenter: presenter, manager: newsManagerMock)
     }
     
     override func tearDown() {
         newsManagerMock = nil
         interactor = nil
-        sut = nil
+        presenter = nil
         super.tearDown()
     }
     
@@ -41,11 +41,11 @@ class NewsTests: CryptoTests {
         
         verify(newsManagerMock.getNews(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.news.count, mockSuccessResponse?.data?.count)
-        XCTAssertFalse(sut.news.isEmpty)
+        XCTAssertEqual(presenter.news.count, mockSuccessResponse?.data?.count)
+        XCTAssertFalse(presenter.news.isEmpty)
         
-        for i in 0..<sut.news.count {
-            let sutNews = sut.news[i]
+        for i in 0 ..< presenter.news.count {
+            let sutNews = presenter.news[i]
             let expectedNews = mockSuccessResponse!.data![i]
             
             if let title = expectedNews.title {
@@ -80,9 +80,9 @@ class NewsTests: CryptoTests {
         
         verify(newsManagerMock.getNews(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.news.count, mockSuccessResponse?.data?.count)
-        XCTAssertTrue(sut.news.isEmpty)
-        XCTAssertEqual(sut.errorMsg, Messages.noNewsFound)
+        XCTAssertEqual(presenter.news.count, mockSuccessResponse?.data?.count)
+        XCTAssertTrue(presenter.news.isEmpty)
+        XCTAssertEqual(presenter.errorMsg, Messages.noNewsFound)
     }
     
     func testGetNewsFailed() {
@@ -97,7 +97,7 @@ class NewsTests: CryptoTests {
         
         verify(newsManagerMock.getNews(model: any(), completion: any())).wasCalled()
         
-        XCTAssertTrue(sut.news.isEmpty)
-        XCTAssertEqual(sut.errorMsg, expectedErrorMsg)
+        XCTAssertTrue(presenter.news.isEmpty)
+        XCTAssertEqual(presenter.errorMsg, expectedErrorMsg)
     }
 }
