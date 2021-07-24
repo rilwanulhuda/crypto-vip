@@ -90,7 +90,7 @@ class HomePresenter: IHomePresenter {
                 view?.displayRefreshCoins(topListCoins: topListCoins, at: indexPath)
                 
                 print("\(String(describing: coin.openPrice))\n\(response)\n\(updatedCoin)\n")
-                return
+                break
             }
         }
     }

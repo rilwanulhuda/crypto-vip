@@ -13,6 +13,7 @@ DerivedData/
 !default.perspectivev3
 xcuserdata/
 *.DS_Store
+*.xcodeproj/MockingbirdCache/*
 
 ## Other
 *.moved-aside

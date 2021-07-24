@@ -15,10 +15,15 @@ class HomeFactory {
         let presenter = HomePresenter(view: controller)
         let manager = HomeManager(networkService: NetworkService.share)
         let interactor = HomeInteractor(presenter: presenter, manager: manager, wsService: wsService)
-        
+
         interactor.parameters = parameters
+        interactor.wsService?.delegate = interactor
         controller.interactor = interactor
         controller.router = router
         return controller
+    }
+    
+    func testGetTopList() {
+        
     }
 }

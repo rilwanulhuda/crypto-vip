@@ -12,43 +12,56 @@ import XCTest
 
 class HomeTests: CryptoTests {
     var homeManagerMock: HomeManagerMock!
-    var wsService: WSServiceMock!
+    var wsServiceMock: WSServiceMock!
     var interactor: HomeInteractor!
-    var sut: HomePresenter!
-    
+    var presenter: HomePresenter!
+
     override func setUp() {
         super.setUp()
+        presenter = HomePresenter(view: nil)
         homeManagerMock = mock(HomeManager.self).initialize(networkService: networkServiceMock)
-        sut = HomePresenter(view: nil)
-        wsService = mock(WSService.self).initialize()
-        interactor = HomeInteractor(presenter: sut, manager: homeManagerMock, wsService: wsService)
+        wsServiceMock = mock(WSService.self).initialize()
+        interactor = HomeInteractor(presenter: presenter, manager: homeManagerMock, wsService: wsServiceMock)
     }
-    
+
     override func tearDown() {
         homeManagerMock = nil
+        presenter = nil
+        wsServiceMock = nil
         interactor = nil
-        sut = nil
         super.tearDown()
     }
     
+    func testInitialSetup() {
+        XCTAssertNotNil(interactor.presenter)
+        XCTAssertNotNil(interactor.manager)
+        XCTAssertNotNil(interactor.wsService)
+    }
+    
     func testGetTopListSuccessResponse() {
-        let mockSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponse)
+        let successResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponse)!
         
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
+
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
-            result(.success(mockSuccessResponse!))
+            result(.success(successResponse))
         }
         
         interactor.getTopList()
         
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.topListCoins.count, mockSuccessResponse?.data?.count)
-        XCTAssertFalse(sut.topListCoins.isEmpty)
+        XCTAssertEqual(interactor.page, 1)
+        XCTAssertEqual(interactor.coinsCount, 0)
+        XCTAssertEqual(interactor.coinsCount, 0)
+        XCTAssertEqual(presenter.topListCoins.count, successResponse.data?.count)
+        XCTAssertFalse(presenter.topListCoins.isEmpty)
         
-        for i in 0..<sut.topListCoins.count {
-            let sutCoin = sut.topListCoins[i]
-            let expectedCoin = mockSuccessResponse!.data![i]
+        for i in 0 ..< presenter.topListCoins.count {
+            let sutCoin = presenter.topListCoins[i]
+            let expectedCoin = successResponse.data![i]
             
             XCTAssertEqual(sutCoin.id, expectedCoin.coinInfo?.id)
             XCTAssertEqual(sutCoin.symbol, expectedCoin.coinInfo?.name)
@@ -80,24 +93,32 @@ class HomeTests: CryptoTests {
     }
     
     func testGetTopListSuccessResponseNoData() {
-        let mockSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponseNoData)
+        let successResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponseNoData)!
         
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
+
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
-            result(.success(mockSuccessResponse!))
+            result(.success(successResponse))
         }
         
         interactor.getTopList()
         
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.topListCoins.count, mockSuccessResponse?.data?.count)
-        XCTAssertTrue(sut.topListCoins.isEmpty)
-        XCTAssertEqual(sut.errorMsg, Messages.noCoinsFound)
+        XCTAssertEqual(interactor.page, 1)
+        XCTAssertEqual(interactor.coinsCount, 0)
+        XCTAssertEqual(interactor.coinsCount, 0)
+        XCTAssertEqual(presenter.topListCoins.count, successResponse.data?.count)
+        XCTAssertTrue(presenter.topListCoins.isEmpty)
+        XCTAssertEqual(presenter.errorMsg, Messages.noCoinsFound)
     }
     
-    func testGetTopListFailed() {
+    func testGetTopListFailedResponse() {
         let expectedErrorMsg = Messages.generalError
+        
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
         
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
@@ -106,60 +127,72 @@ class HomeTests: CryptoTests {
         
         interactor.getTopList()
         
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.errorMsg, expectedErrorMsg)
-        XCTAssertTrue(sut.topListCoins.isEmpty)
+        XCTAssertEqual(interactor.page, 1)
+        XCTAssertEqual(interactor.coinsCount, 0)
+        XCTAssertEqual(interactor.coinsCount, 0)
+        XCTAssertEqual(presenter.errorMsg, expectedErrorMsg)
+        XCTAssertTrue(presenter.topListCoins.isEmpty)
     }
     
-    func testLoadMoreTopListSuccessResponse() {
-        let mockSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponse)
-        let mockPageTwoSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListPageTwoSuccessResponse)
-        let mockPageThreeSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListPageThreeSuccessResponse)
+    func testLoadMoreTopList() {
         var expectedAllCoins: [TopListData] = []
-        
+
         // Initial load page 1
+        let mockSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponse)!
+
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
+        
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
-            result(.success(mockSuccessResponse!))
+            result(.success(mockSuccessResponse))
         }
         
         interactor.getTopList()
-        expectedAllCoins += mockSuccessResponse!.data!
-        
+        expectedAllCoins += mockSuccessResponse.data!
+
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.topListCoins.count, expectedAllCoins.count)
-        XCTAssertFalse(sut.topListCoins.isEmpty)
+        XCTAssertEqual(presenter.topListCoins.count, expectedAllCoins.count)
+        XCTAssertFalse(presenter.topListCoins.isEmpty)
         
         // Start load more page 2
+        let mockPageTwoSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListPageTwoSuccessResponse)!
+        var expectedPage = interactor.page + 1
+        
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
-            result(.success(mockPageTwoSuccessResponse!))
+            result(.success(mockPageTwoSuccessResponse))
         }
         
         interactor.loadMoreTopList()
-        expectedAllCoins += mockPageTwoSuccessResponse!.data!
+        expectedAllCoins += mockPageTwoSuccessResponse.data!
         
-        XCTAssertEqual(interactor.page, 2)
-        XCTAssertEqual(sut.topListCoins.count, expectedAllCoins.count)
-        XCTAssertFalse(sut.topListCoins.isEmpty)
+        XCTAssertEqual(interactor.page, expectedPage)
+        XCTAssertEqual(presenter.topListCoins.count, expectedAllCoins.count)
+        XCTAssertFalse(presenter.topListCoins.isEmpty)
         
         // Start load more page 3
+        let mockPageThreeSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListPageThreeSuccessResponse)!
+        expectedPage = interactor.page + 1
+
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
-            result(.success(mockPageThreeSuccessResponse!))
+            result(.success(mockPageThreeSuccessResponse))
         }
         
         interactor.loadMoreTopList()
-        expectedAllCoins += mockPageThreeSuccessResponse!.data!
+        expectedAllCoins += mockPageThreeSuccessResponse.data!
         
-        XCTAssertEqual(interactor.page, 3)
-        XCTAssertEqual(sut.topListCoins.count, expectedAllCoins.count)
-        XCTAssertFalse(sut.topListCoins.isEmpty)
+        XCTAssertEqual(interactor.page, expectedPage)
+        XCTAssertEqual(presenter.topListCoins.count, expectedAllCoins.count)
+        XCTAssertFalse(presenter.topListCoins.isEmpty)
         
-        for i in 0..<sut.topListCoins.count {
-            let sutCoin = sut.topListCoins[i]
+        for i in 0 ..< presenter.topListCoins.count {
+            let sutCoin = presenter.topListCoins[i]
             let expectedCoin = expectedAllCoins[i]
             
             XCTAssertEqual(sutCoin.id, expectedCoin.coinInfo?.id)
@@ -201,11 +234,11 @@ class HomeTests: CryptoTests {
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.topListCoins.count, mockSuccessResponse?.data?.count)
-        XCTAssertFalse(sut.topListCoins.isEmpty)
+        XCTAssertEqual(presenter.topListCoins.count, mockSuccessResponse?.data?.count)
+        XCTAssertFalse(presenter.topListCoins.isEmpty)
         
         // Start load more page 2
-        let currentTopListCount = sut.topListCoins.count
+        let currentTopListCount = presenter.topListCoins.count
         
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
             _, result in
@@ -217,11 +250,47 @@ class HomeTests: CryptoTests {
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled(2)
         
         XCTAssertEqual(interactor.page, 2)
-        XCTAssertEqual(sut.errorMsg, expectedErrorMsg)
-        XCTAssertEqual(sut.topListCoins.count, currentTopListCount)
+        XCTAssertEqual(presenter.errorMsg, expectedErrorMsg)
+        XCTAssertEqual(presenter.topListCoins.count, currentTopListCount)
     }
     
-    func testTickerResponse() {
+    func testCouldLoadMore() {
+        // MARK: TestCouldLoadMore is TRUE
+
+        interactor.coinsCount = 20
+        interactor.currentCoinsCount = 10
+        
+        var couldLoadMore = interactor.couldLoadMore()
+        
+        XCTAssertEqual(couldLoadMore, true)
+        
+        // MARK: TestCouldLoadMore is FALSE
+
+        interactor.coinsCount = 10
+        interactor.currentCoinsCount = 10
+        
+        couldLoadMore = interactor.couldLoadMore()
+        
+        XCTAssertEqual(couldLoadMore, false)
+    }
+    
+    func testSendSubscription() {
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
+        
+        interactor.sendSubscription(action: .subscribe)
+        
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
+    }
+    
+    func testDidUpdateConnectionStatus() {
+        _ = given(wsServiceMock.sendSubscription(action: any(), subscriptions: any()))
+        
+        interactor.didUpdatedConnectionStatus(isConnected: true)
+        
+        verify(wsServiceMock.sendSubscription(action: any(), subscriptions: any())).wasCalled()
+    }
+    
+    func testDidReceiveTickerResponse() {
         let mockSuccessResponse = mockResponse(of: TopListResponseModel.self, filename: .topListSuccessResponse)
         
         given(homeManagerMock.getTopList(model: any(), completion: any())) ~> {
@@ -233,18 +302,18 @@ class HomeTests: CryptoTests {
         
         verify(homeManagerMock.getTopList(model: any(), completion: any())).wasCalled()
         
-        XCTAssertEqual(sut.topListCoins.count, mockSuccessResponse?.data?.count)
-        XCTAssertFalse(sut.topListCoins.isEmpty)
+        XCTAssertEqual(presenter.topListCoins.count, mockSuccessResponse?.data?.count)
+        XCTAssertFalse(presenter.topListCoins.isEmpty)
         
         let symbol = "TRX"
         let updatedPrice = 0.07798
         let tickerResponse = TickerResponseModel(symbol: symbol, price: updatedPrice)
-        interactor.presenter?.presentTickerResponse(response: tickerResponse)
+        interactor.didReceiveTickerResponse(response: tickerResponse)
         
-        for coin in sut.topListCoins {
+        for coin in presenter.topListCoins {
             if coin.symbol == symbol {
                 XCTAssertEqual(coin.price, "$ \(updatedPrice)")
-                return
+                break
             }
         }
     }

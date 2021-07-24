@@ -37,7 +37,6 @@ class HomeInteractor: IHomeInteractor {
         self.presenter = presenter
         self.manager = manager
         self.wsService = wsService
-        self.wsService?.delegate = self
     }
     
     func getTopList() {
