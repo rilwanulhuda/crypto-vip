@@ -12,6 +12,7 @@ import XCTest
 
 class HomeTests: CryptoTests {
     var homeManagerMock: HomeManagerMock!
+    var wsService: WSServiceMock!
     var interactor: HomeInteractor!
     var sut: HomePresenter!
     
@@ -19,7 +20,8 @@ class HomeTests: CryptoTests {
         super.setUp()
         homeManagerMock = mock(HomeManager.self).initialize(networkService: networkServiceMock)
         sut = HomePresenter(view: nil)
-        interactor = HomeInteractor(presenter: sut, manager: homeManagerMock)
+        wsService = mock(WSService.self).initialize()
+        interactor = HomeInteractor(presenter: sut, manager: homeManagerMock, wsService: wsService)
     }
     
     override func tearDown() {
